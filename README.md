@@ -7,3 +7,20 @@ The Problem: NGOs and social enterprises need affordable digital services (like 
 The Gap: This creates a "trust gap" where skilled, underprivileged youth in tier-2/tier-3 cities have no platform to gain paid experience, and NGOs are forced to hire expensive agencies.
 
 The Challenge: How might we build a "social impact agency" platform that acts as a trusted middleman helping students, managing projects, and ensuring high-quality results for clients, while providing a reliable pathway for youth to build their professional portfolios.
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/temp/1
+
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
