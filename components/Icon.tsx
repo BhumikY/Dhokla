@@ -4,19 +4,19 @@ import React from 'react';
 declare global {
     namespace JSX {
         interface IntrinsicElements {
-            // Fix: Use a simpler and more standard type definition for the 'ion-icon' custom element.
-            'ion-icon': React.HTMLAttributes<HTMLElement> & {
-                name: string;
-                class?: string;
-            };
+            // FIX: Corrected the TypeScript definition for the 'ion-icon' custom element.
+            // Using `React.DetailedHTMLProps` is the recommended approach for typing custom elements
+            // (web components) in React. It ensures standard HTML attributes like `className` are
+            // correctly typed, resolving the JSX error.
+            'ion-icon': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & { name: string }, HTMLElement>;
         }
     }
 }
 
 const Icon: React.FC<{ name: string; className?: string }> = ({ name, className }) => {
-    // For web components like <ion-icon>, it's sometimes necessary to use 'class' directly
-    // instead of React's 'className' prop for styling.
-    return <ion-icon name={name} class={className}></ion-icon>;
+    // For web components like <ion-icon>, it is standard practice in React to use the `className` prop,
+    // which React correctly renders as a 'class' attribute in the DOM.
+    return <ion-icon name={name} className={className}></ion-icon>;
 };
 
 export default Icon;

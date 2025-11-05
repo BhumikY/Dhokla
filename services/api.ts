@@ -1,5 +1,4 @@
 import { Course, Job, User, Role, RegistrationData, JobAssignment } from '../types';
-import { generateCourse as generateCourseWithAI, generateJob as generateJobWithAI } from './geminiService';
 
 // --- LOCALSTORAGE PERSISTENCE ---
 const COURSE_STORAGE_KEY = 'skillsetu_courses';
@@ -185,27 +184,4 @@ export const checkSession = async (): Promise<User | null> => {
     await simulateDelay(100);
     const userJson = localStorage.getItem(USER_STORAGE_KEY);
     return userJson ? JSON.parse(userJson) : null;
-};
-
-export const generateCourse = async (prompt: string): Promise<Course> => {
-    const courseData = await generateCourseWithAI(prompt);
-    const newCourse: Course = {
-        ...courseData,
-        id: Date.now(),
-        image: `https://picsum.photos/seed/${Date.now()}/600/300`
-    };
-    courses = [newCourse, ...courses];
-    persistCourses();
-    return newCourse;
-};
-
-export const generateJob = async (prompt: string): Promise<Job> => {
-    const jobData = await generateJobWithAI(prompt);
-    const newJob: Job = {
-        ...jobData,
-        id: Date.now()
-    };
-    jobs = [newJob, ...jobs];
-    persistJobs();
-    return newJob;
 };

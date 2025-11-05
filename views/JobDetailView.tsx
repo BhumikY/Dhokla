@@ -3,7 +3,7 @@ import { AppContext } from '../contexts/AppContext';
 import Icon from '../components/Icon';
 
 const JobDetailView: React.FC = () => {
-    const { selectedJob, goBack } = useContext(AppContext);
+    const { selectedJob, goBack, setCurrentView } = useContext(AppContext);
 
     if (!selectedJob) {
         return (
@@ -75,8 +75,11 @@ const JobDetailView: React.FC = () => {
                         </div>
                     </div>
                 ) : (
-                    <button className="mt-10 w-full md:w-auto bg-green-600 text-white font-bold py-4 px-10 text-lg rounded-lg shadow-lg hover:bg-green-700">
-                        Submit Team Proposal
+                    <button 
+                        onClick={() => alert('Application feature coming soon!')}
+                        className="mt-10 w-full md:w-auto bg-green-600 text-white font-bold py-4 px-10 text-lg rounded-lg shadow-lg hover:bg-green-700 flex items-center justify-center gap-2">
+                        <Icon name="paper-plane-outline" className="text-2xl" />
+                        Apply Now
                     </button>
                 )}
             </div>

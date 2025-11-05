@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import { AppContext } from '../contexts/AppContext';
 import Icon from './Icon';
@@ -15,15 +14,7 @@ const Footer: React.FC = () => {
                 <p className="mt-2 text-sm text-gray-500">
                     A social initiative concept.
                 </p>
-                 <div className="mt-4">
-                    <button 
-                        onClick={() => setCurrentView('content-generator')}
-                        className="text-xs text-gray-400 hover:text-indigo-400 transition"
-                    >
-                       AI Content Generation
-                    </button>
-                </div>
-                <div className="mt-6 flex justify-center space-x-6">
+                 <div className="mt-6 flex justify-center space-x-6">
                     <a href="#" className="text-gray-400 hover:text-white"><span className="sr-only">Facebook</span><Icon name="logo-facebook" className="h-6 w-6" /></a>
                     <a href="#" className="text-gray-400 hover:text-white"><span className="sr-only">Instagram</span><Icon name="logo-instagram" className="h-6 w-6" /></a>
                     <a href="#" className="text-gray-400 hover:text-white"><span className="sr-only">Twitter</span><Icon name="logo-twitter" className="h-6 w-6" /></a>

@@ -7,7 +7,7 @@ interface JobCardProps {
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
-    const { setCurrentView } = useContext(AppContext);
+    const { setCurrentView, setSelectedJob } = useContext(AppContext);
     return (
         <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
             <div className="p-6 flex-grow flex flex-col">
@@ -21,7 +21,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                     {job.skills.map(skill => <span key={skill} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">{skill}</span>)}
                 </div>
                 <div className="mt-auto pt-6">
-                    <button onClick={() => setCurrentView('job-detail', job)} className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                    <button onClick={() => {
+                        setSelectedJob(job);
+                        setCurrentView('job-detail');
+                        }} className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
                         {job.assignment ? 'View Team Project' : 'View Details & Apply'}
                     </button>
                 </div>

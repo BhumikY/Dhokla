@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import { Course } from '../types';
 import { AppContext } from '../contexts/AppContext';
@@ -8,20 +7,34 @@ interface CourseCardProps {
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
-    const { setCurrentView } = useContext(AppContext);
+    const { setCurrentView, setSelectedCourse } = useContext(AppContext);
+    
+    const isUrl = course.image.startsWith('http');
 
     return (
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105 flex flex-col">
-            <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
-            <div className="p-6 flex flex-col flex-grow">
-                <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium self-start">{course.language}</span>
-                <h3 className="mt-4 text-xl font-semibold text-gray-900">{course.title}</h3>
-                <p className="mt-2 text-sm text-gray-600">
-                    <span className="font-medium text-gray-800">{course.mentor}</span> ({course.college})
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+            {isUrl ? (
+                <img className="h-48 w-full object-cover" src={course.image} alt={course.title} />
+            ) : (
+                <div className="h-48 w-full flex items-center justify-center bg-gray-100 text-6xl">
+                    {course.image}
+                </div>
+            )}
+            <div className="p-6 flex-grow flex flex-col">
+                <div className="flex justify-between items-start">
+                    <h3 className="text-xl font-semibold text-gray-900 pr-4">{course.title}</h3>
+                    <span className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium whitespace-nowrap">{course.language}</span>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                    by <span className="font-medium text-indigo-600">{course.mentor}</span> from {course.college}
                 </p>
-                <div className="mt-auto pt-5">
-                    <button onClick={() => setCurrentView('course-detail', course)} className="w-full bg-white text-indigo-600 font-medium py-2 px-4 rounded-lg border border-indigo-600 hover:bg-indigo-50 transition-colors">
-                        Learn More
+                <p className="text-gray-700 mt-4 text-sm flex-grow">{course.description.substring(0, 120)}...</p>
+                <div className="mt-auto pt-6">
+                     <button onClick={() => {
+                        setSelectedCourse(course);
+                        setCurrentView('course-detail');
+                     }} className="w-full bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                        View Course
                     </button>
                 </div>
             </div>

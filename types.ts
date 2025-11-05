@@ -22,6 +22,13 @@ export interface RegistrationData {
     role: Role;
 }
 
+export interface FreeResource {
+    title: string;
+    url: string;
+    type: string;
+    duration: string;
+}
+
 export interface Course {
     id: number;
     title: string;
@@ -31,6 +38,7 @@ export interface Course {
     description: string;
     modules: string[];
     language: string;
+    freeResources?: FreeResource[];
 }
 
 export interface JobAssignment {

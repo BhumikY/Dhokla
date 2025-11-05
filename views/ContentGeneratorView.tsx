@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { generateCourse, generateJob } from '../services/api';
+// FIX: Imported AI generation functions from the correct service file ('geminiService').
+import { generateCourse, generateJob } from '../services/geminiService';
 import { AppContext } from '../contexts/AppContext';
 import Icon from '../components/Icon';
 
