@@ -3,8 +3,8 @@
 <h1>SkillSETU 🚀</h1>
 <h3>
 An Ed-Tech platform that trains underprivileged youth in digital skills and connects them with NGOs for paid freelance work—acting as a full-service social impact agency.
-   
-   
+</h3>
+<h3>
    Link for video demo: https://drive.google.com/file/d/1nYC5Vx0T4_Baq0dMqWMJMioD5WIWat4D/view?usp=drivesdk
 </h3>
 </div>
