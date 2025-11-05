@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://github.com/BhumikY/Dhokla/blob/main/Hackathon/logos.png" alt="SkillSetu Logo" width="150" />
+<img src="https://github.com/BhumikY/Dhokla/blob/main/logos.png" alt="SkillSetu Logo" width="150" />
 <h1>SkillSETU 🚀</h1>
 <h3>
 An Ed-Tech platform that trains underprivileged youth in digital skills and connects them with NGOs for paid freelance work—acting as a full-service social impact agency.
