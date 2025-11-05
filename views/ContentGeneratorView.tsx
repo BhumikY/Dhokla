@@ -26,11 +26,11 @@ const ContentGeneratorView: React.FC = () => {
         try {
             if (generationType === 'course') {
                 const newCourse = await generateCourse(prompt);
-                addCourse(newCourse);
+                await addCourse(newCourse);
                 setSuccessMessage(`Successfully generated course: "${newCourse.title}"`);
             } else {
                 const newJob = await generateJob(prompt);
-                addJob(newJob);
+                await addJob(newJob);
                  setSuccessMessage(`Successfully generated job: "${newJob.title}"`);
             }
             setPrompt('');

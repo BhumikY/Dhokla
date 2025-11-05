@@ -25,9 +25,9 @@ const Navbar: React.FC = () => {
         setShowUserMenu(false);
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         setShowUserMenu(false);
-        logout();
+        await logout();
     };
 
     const getDashboardView = (): View => {

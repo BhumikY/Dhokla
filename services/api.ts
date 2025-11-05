@@ -89,6 +89,8 @@ const safelyParseJSON = <T>(key: string, defaultValue: T): T => {
     try {
         const item = localStorage.getItem(key);
         if (item === null) {
+            // Seed data if it doesn't exist
+            localStorage.setItem(key, JSON.stringify(defaultValue));
             return defaultValue;
         }
         return JSON.parse(item) as T;
@@ -184,4 +186,27 @@ export const checkSession = async (): Promise<User | null> => {
     await simulateDelay(100);
     const userJson = localStorage.getItem(USER_STORAGE_KEY);
     return userJson ? JSON.parse(userJson) : null;
+};
+
+export const addCourse = async (courseData: Omit<Course, 'id' | 'image'>): Promise<Course> => {
+    await simulateDelay(300);
+    const newCourse: Course = {
+        ...courseData,
+        id: Date.now(),
+        image: `https://picsum.photos/seed/${Date.now()}/600/300`,
+    };
+    courses.unshift(newCourse);
+    persistCourses();
+    return newCourse;
+};
+
+export const addJob = async (jobData: Omit<Job, 'id'>): Promise<Job> => {
+    await simulateDelay(300);
+    const newJob: Job = {
+        ...jobData,
+        id: Date.now(),
+    };
+    jobs.unshift(newJob);
+    persistJobs();
+    return newJob;
 };

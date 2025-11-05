@@ -5,10 +5,10 @@ declare global {
     namespace JSX {
         interface IntrinsicElements {
             // FIX: Corrected the TypeScript definition for the 'ion-icon' custom element.
-            // Using `React.DetailedHTMLProps` is the recommended approach for typing custom elements
-            // (web components) in React. It ensures standard HTML attributes like `className` are
-            // correctly typed, resolving the JSX error.
-            'ion-icon': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & { name: string }, HTMLElement>;
+            // By extending React.DetailedHTMLProps, we ensure that standard props like `className`
+            // are available, and we add the custom `name` prop required by ion-icon. This
+            // resolves the JSX error.
+            'ion-icon': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & { name: string };
         }
     }
 }

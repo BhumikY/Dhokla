@@ -55,3 +55,23 @@ export interface Job {
     skills: string[];
     assignment?: JobAssignment;
 }
+
+// FIX: Added Player and LobbyGameState types for the TaskLobbyView feature.
+export interface Player {
+    name: string;
+    avatarColor: string;
+}
+
+export type LobbyGameState = 'waiting' | 'started' | 'aborted';
+
+// FIX: Added Skill and SkillResource types for the ResourceHubView feature.
+export interface Skill {
+    name: string;
+    youtubeUrl: string;
+    description: string;
+}
+
+export interface SkillResource {
+    category: string;
+    skills: Skill[];
+}
