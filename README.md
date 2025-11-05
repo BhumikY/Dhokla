@@ -7,6 +7,11 @@ An Ed-Tech platform that trains underprivileged youth in digital skills and conn
 <h3>
    Link for video demo: https://drive.google.com/file/d/1nYC5Vx0T4_Baq0dMqWMJMioD5WIWat4D/view?usp=drivesdk
 </h3>
+<h3>
+   Link for Github Repo: https://github.com/BhumikY/Dhokla/tree/main
+</h3>
+<h3>
+</h3>
 </div>
 
 <p align="center">
