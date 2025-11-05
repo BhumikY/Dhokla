@@ -1,6 +1,5 @@
-
 import React, { useState, useContext } from 'react';
-import { generateCourse, generateJob } from '../services/geminiService';
+import { generateCourse, generateJob } from '../services/api';
 import { AppContext } from '../contexts/AppContext';
 import Icon from '../components/Icon';
 
@@ -35,7 +34,9 @@ const ContentGeneratorView: React.FC = () => {
             }
             setPrompt('');
         } catch (err) {
-            setError(err instanceof Error ? err.message : "An unknown error occurred.");
+            const errorMessage = err instanceof Error ? err.message : "An unknown error occurred.";
+            setError(`AI Generation Failed: ${errorMessage}`);
+            console.error(err);
         } finally {
             setIsLoading(false);
         }

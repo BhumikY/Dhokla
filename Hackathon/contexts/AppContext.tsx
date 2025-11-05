@@ -1,66 +1,6 @@
-
-import React, { createContext, useState, useCallback, ReactNode } from 'react';
-import { Course, Job, User, Role, View } from '../types';
-
-// --- MOCK DATA ---
-const mockCourses: Course[] = [
-    {
-        id: 1,
-        title: "Video Editing for YouTube",
-        mentor: "Riya G.",
-        college: "SSG, St. Xavier's",
-        image: "https://picsum.photos/seed/video/600/300",
-        description: "Learn to edit engaging vlogs and videos for YouTube using mobile and desktop tools. This course is perfect for beginners.",
-        modules: ["Introduction to Editing", "Cutting & Splicing Clips", "Adding Text & Music", "Color Correction Basics", "Exporting for YouTube"],
-        language: "English"
-    },
-    {
-        id: 2,
-        title: "Basic Web Development",
-        mentor: "Aarav S.",
-        college: "NSS, IIT Delhi",
-        image: "https://picsum.photos/seed/webdev/600/300",
-        description: "Build your first website from scratch. This course covers the fundamentals of HTML, CSS, and basic JavaScript.",
-        modules: ["What is HTML?", "CSS Basics: Styling Your Page", "Understanding Flexbox & Grid", "Introduction to JavaScript", "Final Project: Your Portfolio Page"],
-        language: "English"
-    },
-    {
-        id: 3,
-        title: "Graphic Design (Hindi)",
-        mentor: "Suraj P.",
-        college: "SSG, BHU Varanasi",
-        image: "https://picsum.photos/seed/design/600/300",
-        description: "सोशल मीडिया के लिए सुंदर पोस्टर और बैनर बनाना सीखें। यह कोर्स Canva और अन्य टूल को हिंदी में सिखाता है।",
-        modules: ["Design Principles (in Hindi)", "Using Canva", "Color Theory (in Hindi)", "Creating Social Media Posts", "Project: Local Shop Poster"],
-        language: "Hindi"
-    }
-];
-
-const mockJobs: Job[] = [
-    {
-        id: 1,
-        title: "Edit Weekly YouTube Vlog",
-        client: "TechVlogger",
-        budget: "₹1,500 / vlog",
-        description: "Need a skilled video editor to cut, add B-roll, and color grade my 15-min weekly vlogs. This is an ongoing project. Must be familiar with YouTube trends.",
-        skills: ["Video Editing", "Color Grading", "Adobe Premiere Pro (or similar)"]
-    },
-    {
-        id: 2,
-        title: "Logo Design for Local Shop (Hindi)",
-        client: "Sharma Sweets",
-        budget: "₹800 (One-time)",
-        description: "हमें अपनी मिठाई की दुकान के लिए एक नए, सुंदर लोगो की आवश्यकता है। (We need a new, beautiful logo for our sweet shop.)",
-        skills: ["Graphic Design", "Logo Design", "Canva"]
-    },
-];
-
-const users: Record<Role, User> = {
-    [Role.Learner]: { name: 'Priya K.', role: Role.Learner, avatarText: 'PK' },
-    [Role.Mentor]: { name: 'Aarav S.', role: Role.Mentor, avatarText: 'AS', tagline: 'NSS - IIT Delhi' },
-    [Role.Client]: { name: 'TechVlogger', role: Role.Client, avatarText: 'TV' },
-    [Role.Admin]: { name: 'Admin', role: Role.Admin, avatarText: 'AD' }
-};
+import React, { createContext, useState, useCallback, ReactNode, useEffect } from 'react';
+import { Course, Job, User, Role, View, RegistrationData } from '../types';
+import * as api from '../services/api';
 
 interface AppContextType {
     currentView: View;
@@ -71,34 +11,83 @@ interface AppContextType {
     selectedCourse: Course | null;
     selectedJob: Job | null;
     showLoginModal: boolean;
+    isLoading: boolean;
+    error: string | null;
     setCurrentView: (view: View, data?: any) => void;
     goBack: () => void;
-    login: (role: Role) => void;
+    login: (email: string, password: string) => Promise<void>;
+    register: (data: RegistrationData) => Promise<void>;
     logout: () => void;
     setShowLoginModal: (show: boolean) => void;
-    addCourse: (course: Omit<Course, 'id' | 'image'>) => void;
-    addJob: (job: Omit<Job, 'id'>) => void;
+    addCourse: (course: Course) => void;
+    addJob: (job: Job) => void;
 }
 
 export const AppContext = createContext<AppContextType>({} as AppContextType);
+
+const getDashboardViewForRole = (role: Role): View => {
+    switch (role) {
+        case Role.Learner: return 'learner-dashboard';
+        case Role.Mentor: return 'mentor-dashboard';
+        case Role.Client: return 'client-dashboard';
+        case Role.Admin: return 'content-generator';
+        default: return 'home';
+    }
+}
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [currentView, _setCurrentView] = useState<View>('home');
     const [previousView, setPreviousView] = useState<View>('home');
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [courses, setCourses] = useState<Course[]>(mockCourses);
-    const [jobs, setJobs] = useState<Job[]>(mockJobs);
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [jobs, setJobs] = useState<Job[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
     const [selectedJob, setSelectedJob] = useState<Job | null>(null);
     const [showLoginModal, setShowLoginModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    
+    useEffect(() => {
+        const loadApplicationData = async () => {
+            try {
+                setIsLoading(true);
+                setError(null);
+                const [fetchedCourses, fetchedJobs, persistedUser] = await Promise.all([
+                    api.getCourses(),
+                    api.getJobs(),
+                    api.checkSession(),
+                ]);
+                setCourses(fetchedCourses);
+                setJobs(fetchedJobs);
+
+                if (persistedUser) {
+                    setCurrentUser(persistedUser);
+                    _setCurrentView(getDashboardViewForRole(persistedUser.role));
+                }
+
+            } catch (err) {
+                setError("Failed to load platform data.");
+                console.error(err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadApplicationData();
+    }, []);
+
 
     const setCurrentView = useCallback((view: View, data?: any) => {
         setPreviousView(currentView);
         if (view === 'course-detail' && data) {
             setSelectedCourse(data);
+        } else {
+            setSelectedCourse(null);
         }
+
         if (view === 'job-detail' && data) {
             setSelectedJob(data);
+        } else {
+            setSelectedJob(null);
         }
         _setCurrentView(view);
         window.scrollTo(0, 0);
@@ -109,46 +98,32 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         window.scrollTo(0, 0);
     }, [previousView]);
 
-    const login = useCallback((role: Role) => {
-        const user = users[role];
+    const login = useCallback(async (email: string, password: string) => {
+        const user = await api.login(email, password);
         setCurrentUser(user);
         setShowLoginModal(false);
-        switch (role) {
-            case Role.Learner:
-                setCurrentView('learner-dashboard');
-                break;
-            case Role.Mentor:
-                setCurrentView('mentor-dashboard');
-                break;
-            case Role.Client:
-                setCurrentView('client-dashboard');
-                break;
-            case Role.Admin:
-                setCurrentView('content-generator');
-                break;
-        }
-    }, [setCurrentView]);
+        _setCurrentView(getDashboardViewForRole(user.role));
+    }, []);
 
-    const logout = useCallback(() => {
+    const register = useCallback(async (data: RegistrationData) => {
+        const user = await api.register(data);
+        setCurrentUser(user);
+        setShowLoginModal(false);
+        _setCurrentView(getDashboardViewForRole(user.role));
+    }, []);
+
+    const logout = useCallback(async () => {
+        await api.logout();
         setCurrentUser(null);
-        setCurrentView('home');
-    }, [setCurrentView]);
+        _setCurrentView('home');
+    }, []);
     
-    const addCourse = (courseData: Omit<Course, 'id' | 'image'>) => {
-        const newCourse: Course = {
-            ...courseData,
-            id: Date.now(),
-            image: `https://picsum.photos/seed/${Date.now()}/600/300`
-        };
-        setCourses(prev => [newCourse, ...prev]);
+    const addCourse = (course: Course) => {
+        setCourses(prev => [course, ...prev]);
     };
     
-    const addJob = (jobData: Omit<Job, 'id'>) => {
-        const newJob: Job = {
-            ...jobData,
-            id: Date.now()
-        };
-        setJobs(prev => [newJob, ...prev]);
+    const addJob = (job: Job) => {
+        setJobs(prev => [job, ...prev]);
     };
 
     return (
@@ -161,9 +136,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
             selectedCourse,
             selectedJob,
             showLoginModal,
+            isLoading,
+            error,
             setCurrentView,
             goBack,
             login,
+            register,
             logout,
             setShowLoginModal,
             addCourse,

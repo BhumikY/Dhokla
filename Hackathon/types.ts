@@ -1,4 +1,3 @@
-
 export enum Role {
     Learner = 'learner',
     Mentor = 'mentor',
@@ -10,9 +9,17 @@ export type View = 'home' | 'learner-dashboard' | 'mentor-dashboard' | 'client-d
 
 export interface User {
     name: string;
+    email: string;
     role: Role;
     avatarText: string;
     tagline?: string;
+}
+
+export interface RegistrationData {
+    name: string;
+    email: string;
+    password: string;
+    role: Role;
 }
 
 export interface Course {
